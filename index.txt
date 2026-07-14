@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f2ed00" />
+  <title>시대에듀 스포츠지도사 2급 보디빌딩 실기동작카드</title>
+
+  <style>
+    :root {
+      --yellow: #f2ed00;
+      --blue: #00a8e8;
+      --ink: #101820;
+      --white: #ffffff;
+      --pink: #ff2b8a;
+      --shadow: 0 16px 36px rgba(16, 24, 32, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family:
+        Pretendard,
+        "Noto Sans KR",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      color: var(--ink);
+      background: #dfe7ec;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow-x: hidden;
+    }
+
+    button {
+      font: inherit;
+      touch-action: manipulation;
+    }
+
+    /*
+      제목, 진행률, 카드, 버튼, 랜덤 섞기까지
+      전체 화면 구성이 9:16 비율 안에 들어갑니다.
+    */
+    .app-frame {
+      width: min(100vw, calc(100vh * 9 / 16), 520px);
+      aspect-ratio: 9 / 16;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+      gap: 10px;
+      padding:
+        max(12px, env(safe-area-inset-top))
+        12px
+        max(12px, env(safe-area-inset-bottom));
+      overflow: hidden;
+      background:
+        linear-gradient(
+          180deg,
+          var(--yellow) 0%,
+          var(--yellow) 34%,
+          var(--blue) 34%,
+          var(--blue) 100%
+        );
+      box-shadow: 0 0 38px rgba(16, 24, 32, 0.2);
+    }
+
+    .title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .title-wrap {
+      min-width: 0;
+    }
+
+    .year {
+      margin: 0 0 3px;
+      color: var(--blue);
+      font-size: clamp(12px, 3.7vw, 17px);
+      font-weight: 1000;
+      line-height: 1;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(21px, 7.1vw, 36px);
+      line-height: 1;
+      font-weight: 1000;
+      letter-spacing: -0.065em;
+    }
+
+    h1 span {
+      display: inline-block;
+      padding: 0.1em 0.22em 0.14em;
+      color: var(--white);
+      background: var(--ink);
+      transform: skew(-4deg);
+      box-shadow: 5px 5px 0 var(--blue);
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      font-size: clamp(10px, 2.9vw, 13px);
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .counter-pill {
+      flex: 0 0 auto;
+      min-width: 62px;
+      padding: 8px 10px;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      background: var(--white);
+      text-align: center;
+      font-size: clamp(11px, 3vw, 13px);
+      font-weight: 1000;
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+
+    .progress-track {
+      height: 10px;
+      overflow: hidden;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      background: var(--white);
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      background: var(--pink);
+      transition: width .25s ease;
+    }
+
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 5px;
+      font-size: clamp(9px, 2.5vw, 11px);
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .card-shell {
+      min-height: 0;
+      position: relative;
+      overflow: hidden;
+      border: 4px solid var(--ink);
+      border-radius: 22px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .card-face {
+      width: 100%;
+      height: 100%;
+    }
+
+    .front {
+      position: relative;
+      display: grid;
+      place-items: center;
+      padding: 28px 22px;
+      cursor: pointer;
+      background:
+        radial-gradient(circle at 88% 12%, rgba(0,168,232,.22) 0 42px, transparent 44px),
+        radial-gradient(circle at 14% 88%, rgba(255,43,138,.14) 0 50px, transparent 52px),
+        var(--white);
+    }
+
+    .exercise-name {
+      max-width: 100%;
+      margin: 0;
+      text-align: center;
+      word-break: keep-all;
+      line-height: 1.12;
+      font-weight: 1000;
+      letter-spacing: -0.07em;
+    }
+
+    .tap-guide {
+      position: absolute;
+      left: 50%;
+      bottom: 16px;
+      transform: translateX(-50%);
+      padding: 7px 11px;
+      border-radius: 999px;
+      color: var(--white);
+      background: var(--ink);
+      font-size: clamp(9px, 2.6vw, 11px);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .back {
+      display: none;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      background: var(--ink);
+      scrollbar-width: thin;
+    }
+
+    .back.is-visible {
+      display: block;
+    }
+
+    .image-list {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .exercise-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      min-height: 100%;
+      object-fit: contain;
+      background: var(--white);
+    }
+
+    .image-divider {
+      flex: 0 0 auto;
+      height: 16px;
+      background:
+        repeating-linear-gradient(
+          -45deg,
+          var(--yellow) 0 14px,
+          var(--ink) 14px 28px
+        );
+    }
+
+    .image-error {
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      text-align: center;
+      color: var(--white);
+      background: var(--ink);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.65;
+      word-break: break-all;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr 1fr;
+      gap: 7px;
+      padding: 8px;
+      border: 3px solid var(--ink);
+      border-radius: 18px;
+      background: rgba(255,255,255,.95);
+      box-shadow: 5px 5px 0 rgba(16,24,32,.75);
+    }
+
+    .btn {
+      min-height: 44px;
+      border: 3px solid var(--ink);
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: clamp(12px, 3.4vw, 14px);
+      font-weight: 1000;
+    }
+
+    .btn:active {
+      transform: translateY(2px);
+    }
+
+    .btn-prev {
+      color: var(--ink);
+      background: var(--white);
+    }
+
+    .btn-flip {
+      color: var(--ink);
+      background: var(--yellow);
+    }
+
+    .btn-next {
+      color: var(--white);
+      background: var(--blue);
+    }
+
+    .shuffle-row {
+      display: flex;
+      justify-content: center;
+    }
+
+    .btn-shuffle {
+      min-width: 190px;
+      min-height: 44px;
+      padding: 0 20px;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      color: var(--white);
+      background: var(--pink);
+      cursor: pointer;
+      font-size: clamp(12px, 3.4vw, 14px);
+      font-weight: 1000;
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+
+    .btn-shuffle:active {
+      transform: translate(2px, 2px);
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(24px + env(safe-area-inset-bottom));
+      z-index: 50;
+      transform: translateX(-50%) translateY(15px);
+      padding: 10px 14px;
+      border: 3px solid var(--ink);
+      border-radius: 999px;
+      color: var(--white);
+      background: var(--ink);
+      font-size: 12px;
+      font-weight: 900;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-height: 700px) {
+      .app-frame {
+        gap: 7px;
+        padding-top: max(8px, env(safe-area-inset-top));
+        padding-bottom: max(8px, env(safe-area-inset-bottom));
+      }
+
+      .subtitle {
+        margin-top: 7px;
+      }
+
+      .controls {
+        padding: 6px;
+      }
+
+      .btn,
+      .btn-shuffle {
+        min-height: 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-frame">
+    <header>
+      <div class="title-row">
+        <div class="title-wrap">
+          <p class="year">시대에듀</p>
+          <h1><span>실기동작카드</span></h1>
+          <p class="subtitle">스포츠지도사 2급 · 보디빌딩</p>
+        </div>
+
+        <div class="counter-pill" id="counter">1 / 3</div>
+      </div>
+    </header>
+
+    <section aria-label="진행률">
+      <div class="progress-track">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+      <div class="progress-text">
+        <span id="progressLabel">진행률 33%</span>
+        <span id="progressCount">1장 학습 중</span>
+      </div>
+    </section>
+
+    <main class="card-shell">
+      <section class="card-face front" id="front" aria-label="카드 앞면">
+        <h2 class="exercise-name" id="exerciseName">바벨 벤치프레스</h2>
+        <div class="tap-guide">카드를 눌러 사진 보기</div>
+      </section>
+
+      <section class="card-face back" id="back" aria-label="카드 뒷면">
+        <div class="image-list" id="imageList"></div>
+      </section>
+    </main>
+
+    <nav class="controls" aria-label="카드 조작">
+      <button class="btn btn-prev" id="prevBtn" type="button">← 이전</button>
+      <button class="btn btn-flip" id="flipBtn" type="button">사진 보기</button>
+      <button class="btn btn-next" id="nextBtn" type="button">다음 →</button>
+    </nav>
+
+    <div class="shuffle-row">
+      <button class="btn-shuffle" id="shuffleBtn" type="button">🔀 카드 랜덤 섞기</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">카드를 다시 섞었습니다.</div>
+
+  <script>
+    /*
+      ==========================================================
+      사진 파일명 규칙
+      ==========================================================
+
+      운동명이 "바벨 벤치프레스"라면 사진 이름을 아래처럼 저장합니다.
+
+      images/바벨 벤치프레스-1.jpg
+      images/바벨 벤치프레스-2.jpg
+
+      운동명이 "백 스쿼트"라면:
+
+      images/백 스쿼트-1.jpg
+      images/백 스쿼트-2.jpg
+
+      아래 목록에는 운동명만 추가하면 됩니다.
+    */
+
+    const exercises = [
+      "바벨 벤치프레스",
+      "백 스쿼트",
+      "덤벨 불가리안 스플릿 스쿼트"
+    ];
+
+    let order = exercises.map((_, index) => index);
+    let currentIndex = 0;
+    let showingBack = false;
+    let toastTimer;
+
+    const counter = document.getElementById("counter");
+    const progressBar = document.getElementById("progressBar");
+    const progressLabel = document.getElementById("progressLabel");
+    const progressCount = document.getElementById("progressCount");
+    const front = document.getElementById("front");
+    const back = document.getElementById("back");
+    const exerciseName = document.getElementById("exerciseName");
+    const imageList = document.getElementById("imageList");
+    const flipBtn = document.getElementById("flipBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const shuffleBtn = document.getElementById("shuffleBtn");
+    const toast = document.getElementById("toast");
+
+    function currentExercise() {
+      return exercises[order[currentIndex]];
+    }
+
+    function imagePath(name, number) {
+      return `images/${name}-${number}.jpg`;
+    }
+
+    function fitExerciseName() {
+      const length = exerciseName.textContent.replace(/\s/g, "").length;
+
+      if (length <= 6) {
+        exerciseName.style.fontSize = "clamp(40px, 13vw, 64px)";
+      } else if (length <= 11) {
+        exerciseName.style.fontSize = "clamp(32px, 10vw, 54px)";
+      } else {
+        exerciseName.style.fontSize = "clamp(26px, 8vw, 44px)";
+      }
+    }
+
+    function updateProgress() {
+      const total = order.length;
+      const current = currentIndex + 1;
+      const percent = total ? Math.round((current / total) * 100) : 0;
+
+      counter.textContent = `${current} / ${total}`;
+      progressBar.style.width = `${percent}%`;
+      progressLabel.textContent = `진행률 ${percent}%`;
+      progressCount.textContent = `${current}장 학습 중`;
+    }
+
+    function showFront() {
+      showingBack = false;
+      front.style.display = "grid";
+      back.classList.remove("is-visible");
+      back.scrollTop = 0;
+      flipBtn.textContent = "사진 보기";
+    }
+
+    function showBack() {
+      showingBack = true;
+      front.style.display = "none";
+      back.classList.add("is-visible");
+      back.scrollTop = 0;
+      flipBtn.textContent = "운동명 보기";
+    }
+
+    function toggleCard() {
+      showingBack ? showFront() : showBack();
+    }
+
+    function makeImage(src, alt, index) {
+      const wrapper = document.createElement("div");
+
+      const img = document.createElement("img");
+      img.className = "exercise-image";
+      img.src = src;
+      img.alt = alt;
+      img.loading = index === 0 ? "eager" : "lazy";
+
+      img.addEventListener("error", () => {
+        wrapper.innerHTML = `
+          <div class="image-error">
+            사진을 불러오지 못했습니다.<br><br>
+            아래 파일명이 정확한지 확인하세요.<br><br>
+            ${src}
+          </div>
+        `;
+      });
+
+      wrapper.appendChild(img);
+      return wrapper;
+    }
+
+    function render() {
+      const name = currentExercise();
+
+      exerciseName.textContent = name;
+      fitExerciseName();
+      updateProgress();
+      imageList.innerHTML = "";
+
+      [1, 2].forEach((number, index) => {
+        const src = imagePath(name, number);
+
+        imageList.appendChild(
+          makeImage(src, `${name} 동작 사진 ${number}`, index)
+        );
+
+        if (number === 1) {
+          const divider = document.createElement("div");
+          divider.className = "image-divider";
+          imageList.appendChild(divider);
+        }
+      });
+
+      showFront();
+    }
+
+    function moveCard(direction) {
+      currentIndex =
+        (currentIndex + direction + order.length) % order.length;
+      render();
+    }
+
+    function showToast(message) {
+      clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.classList.add("show");
+
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 1200);
+    }
+
+    function shuffleCards() {
+      for (let i = order.length - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+        [order[i], order[randomIndex]] = [order[randomIndex], order[i]];
+      }
+
+      currentIndex = 0;
+      render();
+      showToast("카드를 다시 섞었습니다.");
+    }
+
+    front.addEventListener("click", toggleCard);
+    flipBtn.addEventListener("click", toggleCard);
+    prevBtn.addEventListener("click", () => moveCard(-1));
+    nextBtn.addEventListener("click", () => moveCard(1));
+    shuffleBtn.addEventListener("click", shuffleCards);
+
+    render();
+  </script>
+</body>
+</html>
